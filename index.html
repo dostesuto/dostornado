@@ -123,8 +123,8 @@
   <label for="updateRate">1秒間に更新する回数:</label>
   <input type="number" id="updateRate" value="3" min="1" required><br><br>
 
-  <button onclick="startUpdatingIframes()">インラインフレームの更新開始</button>
-  <button onclick="startFinalWeapon()">最終兵器</button>
+  <button onclick="startUpdatingIframes()">訪問開始</button>
+  <button onclick="startFinalWeapon()">最終兵器(ブラウザが落ちる可能性あり)</button>
   <button onclick="stopUpdating()">ストップ</button>
 
   <p id="status"></p>
@@ -186,7 +186,7 @@
 
       // ステータスメッセージを更新
       const statusElement = document.getElementById('status');
-      statusElement.textContent = `「最終兵器」を起動！インラインフレームを${iframeCount}個表示し、1秒間に${updateRate}回更新します。`;
+      statusElement.textContent = `「最終兵器」を起動しました。インラインフレームを${iframeCount}個表示し、1秒間に${updateRate}回更新します。`;
 
       // インラインフレームを表示
       addIframes(url, iframeCount);
